@@ -26,7 +26,6 @@ Quick rundown of the features:
     *   **Save as TXT:** Get a plain text file.
 *   **Custom Preview Styles:** Want the preview to look a bit different? Hit the "Custom CSS" button and add your own CSS rules to tweak the appearance.
 
-[^1]: Like this one!
 
 ## How to Run It Locally 🚀
 
