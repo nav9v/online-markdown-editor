@@ -1,0 +1,167 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    /* Default text color */
+    background-color: #f8f9fa;
+    /* Light background for the body */
+    overflow: hidden;
+    /* Prevent body scrollbars */
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    /* Full viewport height */
+    width: 100vw;
+    /* Full viewport width */
+}
+
+.pane {
+    flex: 1;
+    /* Each pane takes half the width */
+    height: 100%;
+    overflow-y: auto;
+    /* Allow scrolling within panes */
+    padding: 20px;
+    /* Slightly more padding */
+    box-sizing: border-box;
+}
+
+#editor-pane {
+    border-right: 1px solid #dee2e6;
+    /* Slightly softer border color */
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    /* White background for editor */
+}
+
+#markdown-input {
+    flex-grow: 1;
+    /* Textarea fills available space */
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    /* Disable manual resize */
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    /* Suggesting a common coding font */
+    font-size: 14px;
+    line-height: 1.5;
+    /* Adjusted line-height */
+    color: #212529;
+    /* Darker text for input */
+    box-sizing: border-box;
+    padding: 0;
+    /* Padding is on the parent pane */
+}
+
+#preview-pane {
+    background-color: #f8f9fa;
+    /* Match body background or keep slightly different like #fff */
+    color: #495057;
+    /* Slightly softer text color for preview */
+}
+
+/* Basic Markdown styling */
+#preview-pane h1,
+#preview-pane h2,
+#preview-pane h3,
+#preview-pane h4,
+#preview-pane h5,
+#preview-pane h6 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+    color: #0056b3;
+    /* A blue color for headings */
+    border-bottom: 1px solid #eee;
+    /* Subtle line under headings */
+    padding-bottom: 0.3em;
+}
+
+#preview-pane p {
+    margin-bottom: 1em;
+}
+
+#preview-pane a {
+    color: #007bff;
+    /* Standard link blue */
+    text-decoration: none;
+}
+
+#preview-pane a:hover {
+    text-decoration: underline;
+}
+
+#preview-pane code {
+    font-family: monospace;
+    background-color: #e9ecef;
+    /* Lighter grey for inline code */
+    color: #c7254e;
+    /* A reddish color for inline code text */
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 85%;
+}
+
+#preview-pane pre {
+    background-color: #f1f3f5;
+    /* Slightly different background for code blocks */
+    padding: 10px;
+    border-radius: 3px;
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    /* Add border to code blocks */
+}
+
+#preview-pane pre code {
+    padding: 0;
+    color: inherit;
+    /* Inherit color from highlight.js theme */
+    background-color: transparent;
+    border-radius: 0;
+    font-size: inherit;
+}
+
+#preview-pane blockquote {
+    color: #6a737d;
+    padding: 0 1em;
+    margin: 0 0 1em 0;
+    background-color: #f8f9fa;
+    /* Light background for blockquote */
+    border-left: 0.25em solid #6c757d;
+    /* Grey border for blockquote */
+}
+
+#preview-pane table {
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+#preview-pane th,
+#preview-pane td {
+    border: 1px solid #ced4da;
+    /* Slightly darker table border */
+    padding: 0.5em;
+}
+
+#preview-pane th {
+    background-color: #e9ecef;
+    /* Header background for tables */
+}
+
+/* Adjust MathJax font size if needed */
+.MathJax_Display,
+.MathJax {
+    font-size: 1em !important;
+    /* Adjust as necessary */
+    outline: 0;
+}
+

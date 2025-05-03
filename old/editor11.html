@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Live Markdown+MathJax Editor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Libraries -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    showProcessingMessages: false,
+    tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] },
+    TeX: { equationNumbers: { autoNumber: "AMS" } },
+    "HTML-CSS": { linebreaks: { automatic: true } },
+    SVG: { linebreaks: { automatic: true } }
+  });
+</script>
+  <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- You might want to host highlight.js CSS or use a different theme -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+
+
+
+  <script>
+    // Configure Marked
+    marked.setOptions({
+      renderer: new marked.Renderer(),
+      highlight: function (code, lang) {
+        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+        return hljs.highlight(code, { language }).value;
+      },
+      pedantic: false,
+      gfm: true,
+      breaks: false,
+      sanitize: false, // IMPORTANT: We handle escaping manually before MathJax
+      smartLists: true,
+      smartypants: false,
+      xhtml: false
+    });
+
+    // Debounce function
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+
+    const Editor = {
+      delay: 250,        // Debounce delay for MathJax processing
+      preview: null,
+      buffer: null,
+      textarea: null,
+      oldText: null,
+      mathJaxRunning: false,
+      // Store the debounced function reference
+      debouncedMathJaxUpdate: null,
+
+      Init: function () {
+        this.textarea = document.getElementById("markdown-input");
+        this.preview = document.getElementById("preview-pane");
+        this.buffer = document.createElement('div');
+        this.buffer.style.display = 'none';
+        document.body.appendChild(this.buffer);
+
+        // Create the debounced function for MathJax updates
+        this.debouncedMathJaxUpdate = debounce(this.UpdateWithMathJax.bind(this), this.delay);
+
+        // Attach the instant update function to the input event
+        this.textarea.addEventListener('input', this.InstantMarkdownUpdate.bind(this));
+
+        // Ensure MathJax is ready before the first full update
+        MathJax.Hub.Queue(() => {
+          this.UpdateWithMathJax(); // Initial render after MathJax is ready
+        });
+      },
+
+      // Instant update: Render Markdown only
+      InstantMarkdownUpdate: function () {
+        const text = this.textarea.value;
+        try {
+          // Directly parse and update preview with Markdown (no MathJax yet)
+          const markedHtml = marked.parse(text);
+          this.preview.innerHTML = markedHtml;
+          // Trigger the debounced MathJax update
+          this.debouncedMathJaxUpdate();
+        } catch (err) {
+          console.error("Error during instant Markdown rendering:", err);
+          this.preview.innerHTML = "<p style='color: red;'>Error rendering Markdown preview.</p>";
+        }
+      },
+
+      // Update logic including MathJax (called after debounce)
+      UpdateWithMathJax: function () {
+        if (this.mathJaxRunning) {
+          // If MathJax is already running, try again slightly later
+          this.debouncedMathJaxUpdate();
+          return;
+        }
+
+        const text = this.textarea.value;
+        // Check if text actually changed since last *full* update
+        if (text === this.oldText) {
+          // Even if text hasn't changed, MathJax might need to run
+          // if the instant preview overwrote a previous MathJax render.
+          // However, let's assume the instant preview is sufficient if text is identical.
+          // If issues arise, remove this check.
+          // return;
+        }
+        // Store the text that is being processed with MathJax
+        const textToProcess = text;
+        this.oldText = textToProcess; // Update oldText only when starting full process
+
+        try {
+          // 1. Escape HTML before MathJax
+          const escapedText = this.EscapeHtml(textToProcess);
+          this.buffer.innerHTML = escapedText;
+
+          // 2. Process with MathJax
+          this.mathJaxRunning = true; // Set flag
+          MathJax.Hub.Queue(
+            ["resetEquationNumbers", MathJax.InputJax.TeX],
+            ["Typeset", MathJax.Hub, this.buffer],
+            // Pass the original text to the callback to ensure we render the correct version
+            ["ProcessFinalMarkdown", this, textToProcess]
+          );
+        } catch (err) {
+          console.error("Error during text escaping or queuing MathJax:", err);
+          // Revert to instant preview if MathJax prep fails
+          this.InstantMarkdownUpdate();
+          this.mathJaxRunning = false; // Reset flag on error
+        }
+      },
+
+      // Callback function after MathJax processing
+      ProcessFinalMarkdown: function (originalText) {
+        // Check if the text has changed *again* while MathJax was running
+        if (this.textarea.value !== originalText) {
+          this.mathJaxRunning = false; // Reset flag
+          // Don't update the preview, a newer instant preview is likely already shown.
+          // A new debounced update is likely already queued.
+          return;
+        }
+
+        try {
+          let mathJaxHtml = this.buffer.innerHTML;
+
+          // 3. Partial Unescape (Optional)
+          // mathJaxHtml = this.PartialDescape(mathJaxHtml);
+
+          // 4. Process with Marked
+          const markedHtml = marked.parse(mathJaxHtml);
+
+          // 5. Update the preview pane with the final version
+          this.preview.innerHTML = markedHtml;
+
+          // 6. Highlight code blocks (handled by Marked's highlight option)
+
+        } catch (err) {
+          console.error("Error during final Markdown processing or preview update:", err);
+          this.preview.innerHTML = "<p style='color: red;'>Error rendering final preview.</p>";
+        } finally {
+          this.mathJaxRunning = false; // Reset flag when done or on error
+        }
+      },
+
+      // Basic HTML escaping
+      EscapeHtml: function (html) {
+        return html
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      },
+
+      // Optional: Partial unescaping if needed after MathJax
+      PartialDescape: function (html) {
+        // This function might be necessary if MathJax interferes with
+        // characters within code blocks that Marked expects to be unescaped.
+        // Example: Unescape '<', '>' inside code blocks if they were escaped before MathJax.
+        // Needs careful implementation based on observed issues.
+        // For now, we rely on Marked's handling.
+        return html;
+      }
+    };
+
+    // Initialize the editor when the DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      Editor.Init();
+    });
+
+  </script>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="pane" id="editor-pane">
+      <textarea id="markdown-input" spellcheck="false" placeholder="Type Markdown and LaTeX here...">
+# Markdown, MathJax, and Syntax Highlighting Demo
+
+This editor demonstrates the integration of **Markdown**, $\LaTeX$ (via MathJax), and code syntax highlighting. Type in this pane and see the results on the right!
+
+---
+
+## Markdown Features
+
+### Text Formatting
+*   *Italic text*
+*   **Bold text**
+*   ***Bold and Italic***
+*   ~~Strikethrough~~
+*   `Inline code snippet`
+
+### Lists
+1.  First ordered item
+2.  Second ordered item
+    *   Unordered sub-item
+    *   Another sub-item
+        1.  Ordered sub-sub-item
+3.  Third ordered item
+
+- [x] Task list item (checked)
+- [ ] Task list item (unchecked)
+
+### Links and Images
+*   A link to [GitHub](https://github.com).
+*   An image (requires a valid URL):
+    <!-- ![Alt text](https://via.placeholder.com/150) -->
+
+### Blockquotes
+> This is a blockquote.
+> It can span multiple lines.
+>
+> > Nested blockquotes are also possible.
+
+### Tables
+| Header 1 | Header 2 | Header 3 |
+| :------- | :------: | -------: |
+| Left     | Center   | Right    |
+| Cell A   | Cell B   | Cell C   |
+| Cell D   | Cell E   | Cell F   |
+
+---
+
+## LaTeX Examples (MathJax)
+
+### Inline Math
+The famous equation $E=mc^2$ relates energy and mass. The roots of $ax^2 + bx + c = 0$ are $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
+
+### Display Math
+The Euler's identity is beautiful:
+$$ e^{i\pi} + 1 = 0 $$
+
+### Matrices and Arrays
+$$
+\begin{pmatrix}
+a & b \\
+c & d
+\end{pmatrix}
+\quad
+\begin{bmatrix}
+1 & 0 \\
+0 & 1
+\end{bmatrix}
+\quad
+\begin{vmatrix}
+x & y \\
+z & w
+\end{vmatrix}
+$$
+
+### Aligned Equations
+\begin{align}
+f(x) &= (x+a)(x+b) \label{eq:align1} \\
+     &= x^2 + (a+b)x + ab
+\end{align}
+Equation \eqref{eq:align1} shows the expansion.
+
+### Fractions and Integrals
+$$ \frac{\partial u}{\partial t} = \alpha \nabla^2 u $$
+$$ \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi} $$
+
+---
+
+## Code Blocks (Syntax Highlighting)
+
+### Python
+```python
+import numpy as np
+
+def calculate_mean(data):
+  """Calculates the mean of a list of numbers."""
+  if not data:
+    return 0
+  return np.mean(data)
+
+numbers = [1, 2, 3, 4, 5]
+print(f"The mean is: {calculate_mean(numbers)}")
+```
+
+### JavaScript
+```javascript
+// Simple fetch example
+async function fetchData(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Data received:', data);
+    return data;
+  } catch (error) {
+    console.error('Could not fetch data:', error);
+  }
+}
+
+// Example usage (will likely fail without a valid API endpoint)
+// fetchData('https://jsonplaceholder.typicode.com/todos/1');
+```
+
+### HTML
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sample Page</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <p>This is a paragraph.</p>
+    <!-- This is an HTML comment -->
+</body>
+</html>
+```
+
+### CSS
+```css
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+h1 {
+  color: navy;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+}
+```
+    </textarea>
+    </div>
+    <div class="pane" id="preview-pane">
+      <!-- Live preview will be rendered here -->
+      Loading Preview...
+    </div>
+  </div>
+
+</body>
+
+</html>

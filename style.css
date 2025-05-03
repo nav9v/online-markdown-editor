@@ -1,0 +1,696 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    line-height: 1.6;
+    color: #000;
+    background-color: #F0EADC;
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+    overflow-y: auto; /* Keep vertical scrollbar visible */
+}
+
+/* For Firefox - control scrollbar appearance */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #A31D1D #F0EADC;
+}
+
+/* For Chrome, Edge, and Safari - control scrollbar appearance */
+::-webkit-scrollbar {
+    width: 8px; /* Width for vertical scrollbar */
+    height: 0; /* Hide horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #A31D1D;
+    border-radius: 0; /* Square scrollbar instead of rounded */
+    border: none; /* Remove any borders that might round corners */
+}
+
+::-webkit-scrollbar-track {
+    background-color: #F0EADC;
+    border-radius: 0; /* Square track */
+}
+
+::-webkit-scrollbar-corner {
+    background-color: #F0EADC;
+}
+
+/* Apply to specific elements to ensure consistency */
+.pane::-webkit-scrollbar-thumb,
+#markdown-input::-webkit-scrollbar-thumb,
+#preview-content::-webkit-scrollbar-thumb,
+#custom-css-input::-webkit-scrollbar-thumb {
+    background-color: #A31D1D;
+    border-radius: 0;
+    border: none;
+}
+
+.pane::-webkit-scrollbar-track,
+#markdown-input::-webkit-scrollbar-track,
+#preview-content::-webkit-scrollbar-track,
+#custom-css-input::-webkit-scrollbar-track {
+    background-color: #F0EADC;
+    border-radius: 0;
+}
+
+/* Firefox specific for elements */
+.pane, #markdown-input, #preview-content, #custom-css-input {
+    scrollbar-width: thin;
+    scrollbar-color: #A31D1D #F0EADC;
+}
+
+/* For the panes, ensure horizontal scrolling is hidden */
+.pane {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Allow horizontal scrolling for code blocks only */
+#preview-content pre {
+    overflow-x: auto;
+}
+
+.toolbar {
+    padding: 8px 15px;
+    background-color: #FDF5E6;
+    border-bottom: 1px solid #E5D0AC;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    min-height: 34px;
+    box-sizing: border-box;
+}
+
+.toolbar label {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-right: 5px;
+    color: #6D2323;
+    margin-left: 10px;
+}
+
+.toolbar label:first-child {
+    margin-left: 0;
+}
+
+.toolbar button,
+.toolbar .button-group button {
+    background-color: #A31D1D;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85em;
+    transition: background-color 0.2s ease;
+    margin-left: 5px;
+}
+
+.toolbar button:hover,
+.toolbar .button-group button:hover {
+    background-color: #6D2323;
+}
+
+.toolbar .button-group {
+    display: inline-flex;
+    border: 1px solid #A31D1D;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.toolbar .button-group button {
+    border-radius: 0;
+    margin-left: 0;
+    border-left: 1px solid #6D2323;
+    padding: 5px 10px;
+}
+
+.toolbar .button-group button:first-child {
+    border-left: none;
+}
+
+.toolbar .button-group button.active {
+    background-color: #6D2323;
+    font-weight: bold;
+}
+
+.toolbar .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.toolbar .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 2px;
+}
+
+.toolbar .dropdown-content button {
+    color: black;
+    background-color: white;
+    padding: 10px 12px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    border-radius: 0;
+    font-weight: normal;
+}
+
+.toolbar .dropdown-content button:hover {
+    background-color: #FEF9E1;
+    color: #A31D1D;
+}
+
+.toolbar .dropdown:hover .dropdown-content,
+.toolbar .dropdown>button:focus+.dropdown-content,
+.toolbar .dropdown .dropdown-content:focus-within {
+    display: block;
+}
+
+
+.container {
+    display: flex;
+    height: calc(100vh - 50px);
+    width: 100vw;
+}
+
+.pane {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+#editor-pane {
+    border-right: 1px solid #E5D0AC;
+    display: flex;
+    flex-direction: column;
+    background-color: #FEF9E1;
+}
+
+#markdown-input {
+    flex-grow: 1;
+    width: 100%;
+    border: none;
+    outline: none;
+    resize: none;
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #000;
+    background-color: transparent;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+#preview-pane {
+    background-color: #FEF9E1;
+    color: #000;
+}
+
+#custom-css-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 300px;
+    max-width: 90%;
+    z-index: 50;
+    background-color: rgba(254, 249, 225, 0.95);
+    border: 1px solid #E5D0AC;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    display: none;
+    flex-direction: column;
+}
+
+#custom-css-container h4 {
+    margin: 0;
+    padding: 8px 10px;
+    background-color: #E5D0AC;
+    color: #6D2323;
+    font-size: 0.9em;
+    border-bottom: 1px solid #E5D0AC;
+    border-radius: 5px 5px 0 0;
+}
+
+#custom-css-input {
+    flex-grow: 1;
+    min-height: 150px;
+    border: none;
+    outline: none;
+    resize: vertical;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    margin-bottom: 5px;
+}
+
+#custom-css-controls {
+    padding: 5px 10px;
+    text-align: right;
+    background-color: rgba(253, 245, 230, 0.8);
+    border-top: 1px solid #E5D0AC;
+    border-radius: 0 0 5px 5px;
+}
+
+#custom-css-controls button {
+    padding: 4px 8px;
+    font-size: 0.8em;
+    margin-left: 5px;
+}
+
+#preview-content h1,
+#preview-content h2,
+#preview-content h3,
+#preview-content h4,
+#preview-content h5,
+#preview-content h6 {
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
+    font-weight: 600;
+    color: #000;
+    border-bottom: 1px solid #E5D0AC;
+    padding-bottom: 0.3em;
+}
+
+#preview-content h1 {
+    font-size: 2em;
+}
+
+#preview-content h2 {
+    font-size: 1.75em;
+}
+
+#preview-content h3 {
+    font-size: 1.5em;
+}
+
+#preview-content p {
+    margin-bottom: 1em;
+}
+
+#preview-content a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+#preview-content a:hover {
+    text-decoration: underline;
+}
+
+#preview-content p code,
+#preview-content li code,
+#preview-content td code,
+#preview-content h1 code,
+#preview-content h2 code,
+#preview-content h3 code,
+#preview-content h4 code,
+#preview-content h5 code,
+#preview-content h6 code,
+#preview-content a code,
+#preview-content em code,
+#preview-content strong code,
+#preview-content blockquote code {
+    font-family: 'Fira Code', monospace;
+    background-color: #F0EADC;
+    color: #A31D1D;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 85%;
+    white-space: nowrap;
+    font-weight: normal;
+}
+
+#preview-content :not(pre)>code {
+    color: #A31D1D !important;
+    background-color: #F0EADC;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-family: 'Fira Code', monospace;
+    font-size: 85%;
+}
+
+#preview-content pre {
+    background-color: #F0EADC;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    border: 1px solid #E5D0AC;
+    margin-bottom: 1em;
+    line-height: 1.45;
+}
+
+#preview-content pre code.hljs {
+    padding: 0;
+    background-color: transparent;
+    border-radius: 0;
+    font-size: inherit;
+    color: inherit;
+}
+
+#preview-content blockquote {
+    color: #586069;
+    padding: 0 1em;
+    margin: 0 0 1em 0;
+    background-color: transparent;
+    border-left: 0.3em solid #E5D0AC;
+}
+
+#preview-content blockquote blockquote {
+    margin-left: 1em;
+    margin-top: 0.5em;
+}
+
+#preview-content table {
+    border-collapse: collapse;
+    margin-bottom: 1em;
+    width: auto;
+    border: 1px solid #E5D0AC;
+    font-size: 0.95em;
+}
+
+#preview-content th,
+#preview-content td {
+    border: 1px solid #E5D0AC;
+    padding: 0.6em 0.8em;
+}
+
+#preview-content th {
+    background-color: #F0EADC;
+    font-weight: bold;
+    text-align: left;
+}
+
+#preview-content tr:nth-child(even) {
+    background-color: rgba(240, 234, 220, 0.3);
+}
+
+#preview-content hr {
+    border: none;
+    border-top: 2px solid #E5D0AC;
+    margin: 2em 0;
+}
+
+#preview-content .footnotes {
+    margin-top: 2em;
+    padding-top: 1em;
+    border-top: 1px solid #E5D0AC;
+    font-size: 0.9em;
+    color: #333;
+}
+
+#preview-content .footnotes ol {
+    padding-left: 20px;
+}
+
+#preview-content .footnote-ref a {
+    text-decoration: none;
+    color: #0366d6;
+}
+
+#preview-content .footnote-backref {
+    margin-left: 5px;
+    text-decoration: none;
+    color: #0366d6;
+}
+
+#preview-content .footnote-backref:hover {
+    text-decoration: underline;
+}
+
+#preview-content .mermaid {
+    text-align: center;
+    margin-bottom: 1em;
+    background: white;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid #E5D0AC;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+#preview-content .mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
+#preview-content .mermaid-error {
+    color: red;
+    border: 1px dashed red;
+    padding: 10px;
+    margin-bottom: 1em;
+    background-color: #ffebee;
+}
+
+.MathJax_Display,
+.katex-display {
+    font-size: 1.1em !important;
+    outline: 0;
+    margin-top: 0.8em !important;
+    margin-bottom: 0.8em !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 5px;
+}
+
+.MathJax,
+.katex {
+    font-size: 1em !important;
+}
+
+.katex-display>.katex {
+    text-align: center;
+}
+
+button:focus,
+textarea:focus,
+input:focus {
+    outline: 2px solid #A31D1D;
+    outline-offset: 2px;
+}
+
+.toolbar .button-group button:focus {
+    outline-offset: -1px;
+}
+
+#btn-download-pdf:disabled {
+    background-color: #ccc;
+    cursor: wait;
+}
+
+/* Mobile Toggle Buttons - Initially hidden */
+.mobile-toggle-buttons {
+    display: none;
+    margin-right: 10px;
+}
+
+.mobile-toggle-buttons button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85em;
+    background-color: #A31D1D;
+    color: white;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.mobile-toggle-buttons button.active {
+    background-color: #6D2323;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 991px) {
+    /* Tablet adjustments */
+    .toolbar {
+        padding: 8px 10px;
+        gap: 10px;
+    }
+    
+    #preview-content h1 { font-size: 1.8em; }
+    #preview-content h2 { font-size: 1.6em; }
+    #preview-content h3 { font-size: 1.4em; }
+}
+
+@media screen and (max-width: 768px) {
+    /* Mobile adjustments */
+    body, html {
+        font-size: 14px;
+    }
+    
+    /* Show mobile toggle, hide less important toolbar items */
+    .mobile-toggle-buttons {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .toolbar {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    .toolbar > span {
+        display: none; /* Hide the library info text */
+    }
+    
+    /* Stack the container for editor and preview */
+    .container {
+        flex-direction: column;
+        height: calc(100vh - 100px); /* Account for larger toolbar */
+    }
+    
+    .pane {
+        height: 100%;
+        width: 100%;
+        padding: 10px;
+        display: none; /* Initially hide both panes */
+    }
+    
+    /* By default show editor on mobile */
+    #editor-pane {
+        display: block;
+        border-right: none;
+        border-bottom: 1px solid #E5D0AC;
+    }
+    
+    /* Adjust padding and sizing for mobile */
+    #markdown-input, #preview-content {
+        font-size: 14px;
+        padding: 10px 5px;
+    }
+    
+    /* Custom CSS panel takes more space on mobile */
+    #custom-css-container {
+        width: 85%;
+        top: 5px;
+        right: 5px;
+    }
+    
+    /* Table adjustments for mobile */
+    #preview-content table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+    }
+    
+    /* Toolbar button grouping */
+    .toolbar .button-group {
+        flex-grow: 1;
+        justify-content: center;
+    }
+    
+    .toolbar .button-group button {
+        flex: 1;
+        text-align: center;
+        padding: 6px 8px;
+        font-size: 0.8em;
+    }
+    
+    /* Adjust dropdown positioning */
+    .toolbar .dropdown {
+        position: static;
+    }
+    
+    .toolbar .dropdown-content {
+        position: fixed;
+        top: auto;
+        left: 10px;
+        right: 10px;
+        width: auto;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Small mobile screens */
+    .toolbar {
+        padding: 5px;
+        gap: 3px;
+    }
+    
+    .toolbar button,
+    .toolbar .button-group button {
+        padding: 5px 8px;
+        font-size: 0.75em;
+    }
+    
+    #preview-content pre {
+        padding: 8px;
+    }
+    
+    #preview-content table {
+        font-size: 0.85em;
+    }
+    
+    #preview-content th,
+    #preview-content td {
+        padding: 0.4em 0.6em;
+    }
+}
+
+@media print {
+    body {
+        font-size: 11pt;
+        line-height: 1.4;
+    }
+
+    pre,
+    code {
+        font-size: 9pt;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        page-break-inside: avoid;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        page-break-inside: avoid;
+    }
+
+    img,
+    svg {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        page-break-after: avoid;
+        page-break-inside: avoid;
+    }
+
+    .page-break-before {
+        page-break-before: always;
+    }
+
+    .page-break-after {
+        page-break-after: always;
+    }
+}
+
