@@ -4,7 +4,7 @@ This is a little Markdown editor [Try here](https://nav9v.github.io/online-markd
 
 
 
-## Unlike other markdown preview apps, it can render almost all LLM Generated Output Of maths formula equations tables in Markdown.
+## Unlike other Markdown preview apps, this one can render almost all LLM-generated output including math formulas, equations, and tables - directly in Markdown.
 
 ## What Can It Do? ✨
 
