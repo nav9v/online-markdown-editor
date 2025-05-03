@@ -2,6 +2,7 @@
 
 This is a little Markdown editor [Try here](https://nav9v.github.io/online-markdown-editor). It's designed to handle a bunch of cool stuff, making it easy to write and preview your documents.
 
+![Preview](https://github.com/user-attachments/assets/beaf8c9e-7cd7-4a57-b9f1-78770c772f96)
 
 
 ## Unlike other Markdown preview apps, this one can render almost all LLM-generated output including math formulas, equations, and tables - directly in Markdown.
