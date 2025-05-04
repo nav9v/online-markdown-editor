@@ -6,8 +6,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="description" content="Full-featured, open-source online Markdown editor with live preview. Supports MathJax, KaTeX for LaTeX math formulæ, Mermaid diagrams, syntax highlighting. Use LATEX to type formulæ and markdown to format text. Ideal for notes, documentation, and LLM output formatting.">
-  <meta name="keywords" content="online markdown editor, markdown editor, live preview markdown, mathjax, katex, latex, mermaid, syntax highlighting, markdown-it, marked, llm output markdown editor, open source markdown editor">
+  <meta name="description"
+    content="Full-featured, open-source online Markdown editor with live preview. Supports MathJax, KaTeX for LaTeX math formulæ, Mermaid diagrams, syntax highlighting. Use LATEX to type formulæ and markdown to format text. Ideal for notes, documentation, and LLM output formatting.">
+  <meta name="keywords"
+    content="online markdown editor, markdown editor, live preview markdown, mathjax, katex, latex, mermaid, syntax highlighting, markdown-it, marked, llm output markdown editor, open source markdown editor">
 
   <!-- Favicon Setup -->
   <link rel="apple-touch-icon" sizes="180x180" href="asset/apple-touch-icon.png">
@@ -50,43 +52,115 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script src="script.js"></script>
+
+  <!-- Add this script at the end of the head section -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburgerBtn = document.getElementById('mobile-hamburger');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      if (hamburgerBtn && mobileMenu) {
+        hamburgerBtn.addEventListener('click', function () {
+          mobileMenu.classList.toggle('open');
+          hamburgerBtn.classList.toggle('active');
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function (event) {
+          if (!mobileMenu.contains(event.target) && !hamburgerBtn.contains(event.target) && mobileMenu.classList.contains('open')) {
+            mobileMenu.classList.remove('open');
+            hamburgerBtn.classList.remove('active');
+          }
+        });
+      }
+    });
+  </script>
 </head>
 
 <body>
   <div class="toolbar">
-    <a href="https://github.com/nav9v/online-markdown-editor" target="_blank" rel="noopener noreferrer" style="margin-right: 15px; color: #A31D1D; text-decoration: none; font-weight: bold; font-size: 0.9em;">Get Source Code</a>
+    <a href="https://github.com/nav9v/online-markdown-editor" target="_blank" rel="noopener noreferrer" class="source-code-link">Get Source Code</a>
 
-    <!-- Add mobile view toggle buttons -->
+    <!-- Replace bar spans with hamburger emoji -->
+    <button id="mobile-hamburger" class="hamburger-btn" aria-label="Open menu">
+      🍔
+    </button>
+
+    <!-- Mobile view toggle buttons - moved to top for mobile order -->
     <div class="mobile-toggle-buttons">
       <button id="btn-show-editor" class="active">Editor</button>
       <button id="btn-show-preview">Preview</button>
     </div>
 
-    <label for="md-engine">MD Engine:</label>
-    <div class="button-group" id="md-engine-selector">
-      <button id="btn-markdown-it" data-engine="markdown-it" class="active">markdown-it</button>
-      <button id="btn-marked" data-engine="marked">marked</button>
-    </div>
+    <!-- Mobile Menu (slide-out panel) -->
+    <div id="mobile-menu" class="mobile-menu">
+      <div class="mobile-menu-content">
+        <!-- Markdown engine section -->
+        <div class="mobile-menu-section">
+          <label for="md-engine-mobile">MD Engine:</label>
+          <div class="button-group" id="md-engine-mobile">
+            <button id="btn-markdown-it-mobile" data-engine="markdown-it" class="active">markdown-it</button>
+            <button id="btn-marked-mobile" data-engine="marked">marked</button>
+          </div>
+        </div>
 
-    <label for="math-engine">Math Engine:</label>
-    <div class="button-group" id="math-engine-selector">
-      <button id="btn-mathjax" data-engine="mathjax" class="active">MathJax</button>
-      <button id="btn-katex" data-engine="katex">KaTeX</button>
-    </div>
+        <!-- Math engine section -->
+        <div class="mobile-menu-section">
+          <label for="math-engine-mobile">Math Engine:</label>
+          <div class="button-group" id="math-engine-mobile">
+            <button id="btn-mathjax-mobile" data-engine="mathjax" class="active">MathJax</button>
+            <button id="btn-katex-mobile" data-engine="katex">KaTeX</button>
+          </div>
+        </div>
 
-    <div class="dropdown">
-      <button id="btn-download">Download ▼</button>
-      <div class="dropdown-content">
-        <button id="btn-download-pdf">Save as PDF</button>
-        <button id="btn-download-md">Save as MD</button>
-        <button id="btn-download-txt">Save as TXT</button>
+        <!-- Download buttons -->
+        <div class="mobile-menu-section">
+          <label>Download:</label>
+          <div class="mobile-menu-buttons">
+            <button id="btn-download-pdf-mobile">Save as PDF</button>
+            <button id="btn-download-md-mobile">Save as MD</button>
+            <button id="btn-download-txt-mobile">Save as TXT</button>
+          </div>
+        </div>
+
+        <!-- Custom CSS button -->
+        <div class="mobile-menu-section">
+          <button id="btn-toggle-css-mobile">Custom CSS</button>
+        </div>
       </div>
     </div>
 
-    <button id="btn-toggle-css">Custom CSS</button>
+    <!-- Original desktop controls (will be hidden on mobile) -->
+    <div class="desktop-controls">
+      <!-- Markdown engine section -->
+      <label for="md-engine">MD Engine:</label>
+      <div class="button-group" id="md-engine-selector">
+        <button id="btn-markdown-it" data-engine="markdown-it" class="active">markdown-it</button>
+        <button id="btn-marked" data-engine="marked">marked</button>
+      </div>
 
-    <span style="margin-left: auto; font-size: 0.8em; color: #6D2323;">Using markdown-it, Marked, Mermaid,
-      highlight.js</span>
+      <!-- Math engine section -->
+      <label for="math-engine">Math Engine:</label>
+      <div class="button-group" id="math-engine-selector">
+        <button id="btn-mathjax" data-engine="mathjax" class="active">MathJax</button>
+        <button id="btn-katex" data-engine="katex">KaTeX</button>
+      </div>
+
+      <!-- Download dropdown -->
+      <div class="dropdown">
+        <button id="btn-download">Download ▼</button>
+        <div class="dropdown-content">
+          <button id="btn-download-pdf">Save as PDF</button>
+          <button id="btn-download-md">Save as MD</button>
+          <button id="btn-download-txt">Save as TXT</button>
+        </div>
+      </div>
+
+      <!-- Custom CSS button -->
+      <button id="btn-toggle-css">Custom CSS</button>
+    </div>
+
+    <span class="toolbar-info">Using markdown-it, Marked, Mermaid, highlight.js</span>
   </div>
 
   <div class="container">
@@ -222,4 +296,5 @@ This text tries to use features that might fail in less robust editors, especial
     </div>
   </div>
 </body>
+
 </html>

@@ -8,38 +8,35 @@ body {
     line-height: 1.6;
     color: #000;
     background-color: #F0EADC;
-    overflow-x: hidden; /* Hide horizontal scrollbar */
-    overflow-y: auto; /* Keep vertical scrollbar visible */
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-/* For Firefox - control scrollbar appearance */
 html {
     scrollbar-width: thin;
     scrollbar-color: #A31D1D #F0EADC;
 }
 
-/* For Chrome, Edge, and Safari - control scrollbar appearance */
 ::-webkit-scrollbar {
-    width: 8px; /* Width for vertical scrollbar */
-    height: 0; /* Hide horizontal scrollbar */
+    width: 8px;
+    height: 0;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #A31D1D;
-    border-radius: 0; /* Square scrollbar instead of rounded */
-    border: none; /* Remove any borders that might round corners */
+    border-radius: 0;
+    border: none;
 }
 
 ::-webkit-scrollbar-track {
     background-color: #F0EADC;
-    border-radius: 0; /* Square track */
+    border-radius: 0;
 }
 
 ::-webkit-scrollbar-corner {
     background-color: #F0EADC;
 }
 
-/* Apply to specific elements to ensure consistency */
 .pane::-webkit-scrollbar-thumb,
 #markdown-input::-webkit-scrollbar-thumb,
 #preview-content::-webkit-scrollbar-thumb,
@@ -57,19 +54,19 @@ html {
     border-radius: 0;
 }
 
-/* Firefox specific for elements */
-.pane, #markdown-input, #preview-content, #custom-css-input {
+.pane,
+#markdown-input,
+#preview-content,
+#custom-css-input {
     scrollbar-width: thin;
     scrollbar-color: #A31D1D #F0EADC;
 }
 
-/* For the panes, ensure horizontal scrolling is hidden */
 .pane {
     overflow-x: hidden;
     overflow-y: auto;
 }
 
-/* Allow horizontal scrolling for code blocks only */
 #preview-content pre {
     overflow-x: auto;
 }
@@ -181,7 +178,6 @@ html {
 .toolbar .dropdown .dropdown-content:focus-within {
     display: block;
 }
-
 
 .container {
     display: flex;
@@ -423,15 +419,14 @@ html {
     padding-left: 20px;
 }
 
-#preview-content .footnote-ref a {
+#preview-content .footnote-ref a,
+#preview-content .footnote-backref {
     text-decoration: none;
     color: #0366d6;
 }
 
 #preview-content .footnote-backref {
     margin-left: 5px;
-    text-decoration: none;
-    color: #0366d6;
 }
 
 #preview-content .footnote-backref:hover {
@@ -497,7 +492,6 @@ input:focus {
     cursor: wait;
 }
 
-/* Mobile Toggle Buttons - Initially hidden */
 .mobile-toggle-buttons {
     display: none;
     margin-right: 10px;
@@ -519,100 +513,192 @@ input:focus {
     background-color: #6D2323;
 }
 
-/* Responsive Styles */
+/* Hamburger Menu Button - Updated position and styling */
+.hamburger-btn {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 15px;
+    z-index: 1000;
+    font-size: 1.4rem;
+    line-height: 1;
+    position: absolute;
+    left: 10px;
+    top: 3px;
+}
+
+/* Mobile Menu */
+.mobile-menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: -85%;
+    width: 85%;
+    height: 100vh;
+    background: #FDF5E6;
+    z-index: 999;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease;
+    padding-top: 60px;
+    overflow-y: auto;
+}
+
+.mobile-menu.open {
+    left: 0;
+}
+
+.mobile-menu-content {
+    padding: 15px;
+}
+
+.mobile-menu-section {
+    margin-bottom: 20px;
+}
+
+.mobile-menu-section label {
+    display: block;
+    font-weight: bold;
+    color: #6D2323;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.mobile-menu-section .button-group {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.mobile-menu-section .button-group button {
+    flex: 1;
+}
+
+.mobile-menu-section button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    text-align: left;
+    background-color: #A31D1D;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.mobile-menu-section button:hover {
+    background-color: #6D2323;
+}
+
+.mobile-menu-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
 @media screen and (max-width: 991px) {
-    /* Tablet adjustments */
     .toolbar {
         padding: 8px 10px;
         gap: 10px;
     }
-    
-    #preview-content h1 { font-size: 1.8em; }
-    #preview-content h2 { font-size: 1.6em; }
-    #preview-content h3 { font-size: 1.4em; }
+
+    #preview-content h1 {
+        font-size: 1.8em;
+    }
+
+    #preview-content h2 {
+        font-size: 1.6em;
+    }
+
+    #preview-content h3 {
+        font-size: 1.4em;
+    }
 }
 
 @media screen and (max-width: 768px) {
-    /* Mobile adjustments */
-    body, html {
+
+    body,
+    html {
         font-size: 14px;
     }
-    
-    /* Show mobile toggle, hide less important toolbar items */
+
     .mobile-toggle-buttons {
         display: flex;
-        flex: 1;
+        margin: 0 auto;
         justify-content: center;
+        width: 100%;
+        order: -1;
+        margin-bottom: 8px;
     }
-    
+
+    .mobile-toggle-buttons button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
     .toolbar {
         flex-wrap: wrap;
         justify-content: center;
         gap: 5px;
+        padding: 8px 5px 8px 50px; /* Add left padding for hamburger */
+        position: relative; /* For absolute positioning of hamburger */
     }
-    
-    .toolbar > span {
-        display: none; /* Hide the library info text */
+
+    /* Hide the GitHub link on mobile */
+    .toolbar>a[href*="github"] {
+        display: none;
     }
-    
-    /* Stack the container for editor and preview */
-    .container {
-        flex-direction: column;
-        height: calc(100vh - 100px); /* Account for larger toolbar */
+
+    /* Hide the "Using markdown-it..." text on mobile */
+    .toolbar>span {
+        display: none;
     }
-    
-    .pane {
-        height: 100%;
+
+    /* Create proper ordering with flexbox */
+    .toolbar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    /* Make labels and button groups appear on the same row properly */
+    .toolbar label {
+        margin: 5px 0 2px 0;
         width: 100%;
-        padding: 10px;
-        display: none; /* Initially hide both panes */
+        text-align: center;
     }
-    
-    /* By default show editor on mobile */
-    #editor-pane {
-        display: block;
-        border-right: none;
-        border-bottom: 1px solid #E5D0AC;
-    }
-    
-    /* Adjust padding and sizing for mobile */
-    #markdown-input, #preview-content {
-        font-size: 14px;
-        padding: 10px 5px;
-    }
-    
-    /* Custom CSS panel takes more space on mobile */
-    #custom-css-container {
-        width: 85%;
-        top: 5px;
-        right: 5px;
-    }
-    
-    /* Table adjustments for mobile */
-    #preview-content table {
-        width: 100%;
-        display: block;
-        overflow-x: auto;
-    }
-    
-    /* Toolbar button grouping */
+
     .toolbar .button-group {
         flex-grow: 1;
         justify-content: center;
+        max-width: 80%;
+        margin: 0 auto 8px auto;
     }
-    
+
     .toolbar .button-group button {
         flex: 1;
         text-align: center;
         padding: 6px 8px;
         font-size: 0.8em;
     }
-    
-    /* Adjust dropdown positioning */
+
+    /* Fix the dropdown positioning */
     .toolbar .dropdown {
         position: static;
+        width: 80%;
+        margin: 5px auto;
     }
-    
+
+    .toolbar #btn-download {
+        width: 100%;
+        margin-left: 0;
+    }
+
     .toolbar .dropdown-content {
         position: fixed;
         top: auto;
@@ -620,29 +706,132 @@ input:focus {
         right: 10px;
         width: auto;
     }
+
+    /* Center the custom CSS button */
+    .toolbar #btn-toggle-css {
+        margin: 0 auto;
+        width: 80%;
+    }
+
+    /* CRITICAL FIX: Container should remain column direction but panes need proper display handling */
+    .container {
+        flex-direction: column;
+        height: calc(100vh - 105px); /* Further adjusted to eliminate footer white space */
+        min-height: 300px; /* Ensure minimum height even on small screens */
+        margin-bottom: 0; /* Ensure no margin is adding space */
+    }
+
+    /* In mobile view, initially only show editor pane */
+    .pane {
+        height: 100%;
+        width: 100%;
+        padding: 15px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    }
+
+    #editor-pane, #preview-pane {
+        max-height: 100%;
+    }
+
+    #markdown-input {
+        padding-bottom: 50px; /* Add padding at bottom to prevent text being cut off */
+    }
+
+    #preview-content {
+        padding-bottom: 60px; /* More padding at the bottom */
+        overflow-x: auto; /* Allow horizontal scrolling for formulas */
+    }
+
+    /* Show hamburger button */
+    .hamburger-btn {
+        display: flex;
+        order: -2;
+    }
+
+    /* Mobile menu adjustments */
+    .mobile-menu {
+        display: block;
+    }
+
+    /* Hide desktop controls */
+    .desktop-controls {
+        display: none;
+    }
+
+    /* Ensure editor/preview buttons remain visible */
+    .mobile-toggle-buttons {
+        display: flex;
+        margin: 0 auto;
+        justify-content: center;
+        width: calc(100% - 50px);
+        /* Account for hamburger button */
+        order: -1;
+    }
+
+    /* Make math displays scrollable horizontally */
+    #preview-content .MathJax_Display,
+    #preview-content .katex-display {
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 5px 0;
+    }
+
+    /* Ensure tables can be scrolled on mobile */
+    #preview-content table {
+        display: block;
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    /* Adjust code blocks to be fully visible */
+    #preview-content pre {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+}
+
+/* Fix for very small screens to ensure everything is scrollable */
+@media screen and (max-height: 500px) {
+    .container {
+        height: calc(100vh - 85px); /* Further adjusted */
+    }
+
+    .pane {
+        padding: 10px 15px;
+    }
+
+    .mobile-menu {
+        padding-top: 45px; /* Reduce top padding on small height screens */
+    }
 }
 
 @media screen and (max-width: 480px) {
-    /* Small mobile screens */
     .toolbar {
         padding: 5px;
         gap: 3px;
     }
-    
+
     .toolbar button,
     .toolbar .button-group button {
         padding: 5px 8px;
         font-size: 0.75em;
     }
-    
+
+    .mobile-toggle-buttons button {
+        padding: 6px 12px;
+        font-size: 0.85em;
+    }
+
     #preview-content pre {
         padding: 8px;
     }
-    
+
     #preview-content table {
         font-size: 0.85em;
     }
-    
+
     #preview-content th,
     #preview-content td {
         padding: 0.4em 0.6em;
@@ -694,3 +883,34 @@ input:focus {
     }
 }
 
+/* Ensure preview content is fully visible and scrollable */
+#preview-content {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+#preview-content pre code {
+    white-space: pre;
+    word-wrap: normal;
+    overflow-x: auto;
+}
+
+/* Source code link styling (moved from inline) */
+.source-code-link {
+    margin-right: 15px;
+    color: #A31D1D; 
+    text-decoration: none;
+    font-weight: bold; 
+    font-size: 0.9em;
+}
+
+/* Toolbar info text styling (moved from inline) */
+.toolbar-info {
+    margin-left: auto;
+    font-size: 0.8em;
+    color: #6D2323;
+}

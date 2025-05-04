@@ -204,6 +204,9 @@ const Editor = {
             this.elements.showPreviewBtn.addEventListener('click', () => this.SetMobilePane('preview'));
         }
 
+        // Connect mobile menu buttons to their desktop counterparts
+        this.ConnectMobileMenuButtons();
+
         // 6. Check library readiness
         this.state.lastText = this.elements.textarea.value;
         this.CheckLibraries();
@@ -781,7 +784,94 @@ const Editor = {
             console.error("Error unescaping HTML:", e);
             return str; // Return original string on error
         }
-    }
+    },
+
+    // Add this method to the Editor object to handle mobile menu buttons
+    ConnectMobileMenuButtons: function() {
+        // Markdown engine buttons
+        const markdownItMobile = document.getElementById('btn-markdown-it-mobile');
+        const markedMobile = document.getElementById('btn-marked-mobile');
+        const mathjaxMobile = document.getElementById('btn-mathjax-mobile');
+        const katexMobile = document.getElementById('btn-katex-mobile');
+        const downloadPdfMobile = document.getElementById('btn-download-pdf-mobile');
+        const downloadMdMobile = document.getElementById('btn-download-md-mobile');
+        const downloadTxtMobile = document.getElementById('btn-download-txt-mobile');
+        const toggleCssMobile = document.getElementById('btn-toggle-css-mobile');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerBtn = document.getElementById('mobile-hamburger');
+
+        // Helper function to close mobile menu
+        const closeMenu = () => {
+            if (mobileMenu && hamburgerBtn) {
+                mobileMenu.classList.remove('open');
+                hamburgerBtn.classList.remove('active');
+            }
+        };
+
+        // Markdown engine buttons
+        if (markdownItMobile && markedMobile) {
+            markdownItMobile.addEventListener('click', () => {
+                this.SetMarkdownEngine('markdown-it');
+                markdownItMobile.classList.add('active');
+                markedMobile.classList.remove('active');
+                closeMenu();
+            });
+            
+            markedMobile.addEventListener('click', () => {
+                this.SetMarkdownEngine('marked');
+                markedMobile.classList.add('active');
+                markdownItMobile.classList.remove('active');
+                closeMenu();
+            });
+        }
+        
+        // Math engine buttons
+        if (mathjaxMobile && katexMobile) {
+            mathjaxMobile.addEventListener('click', () => {
+                this.SetMathEngine('mathjax');
+                mathjaxMobile.classList.add('active');
+                katexMobile.classList.remove('active');
+                closeMenu();
+            });
+            
+            katexMobile.addEventListener('click', () => {
+                this.SetMathEngine('katex');
+                katexMobile.classList.add('active');
+                mathjaxMobile.classList.remove('active');
+                closeMenu();
+            });
+        }
+        
+        // Download buttons
+        if (downloadPdfMobile) {
+            downloadPdfMobile.addEventListener('click', () => {
+                this.DownloadAs('pdf');
+                closeMenu();
+            });
+        }
+        
+        if (downloadMdMobile) {
+            downloadMdMobile.addEventListener('click', () => {
+                this.DownloadAs('md');
+                closeMenu();
+            });
+        }
+        
+        if (downloadTxtMobile) {
+            downloadTxtMobile.addEventListener('click', () => {
+                this.DownloadAs('txt');
+                closeMenu();
+            });
+        }
+        
+        // Custom CSS button
+        if (toggleCssMobile) {
+            toggleCssMobile.addEventListener('click', () => {
+                this.ToggleCustomCSS();
+                closeMenu();
+            });
+        }
+    },
 };
 
 // Initialize the editor when the DOM is fully loaded and parsed
@@ -796,4 +886,4 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
             Editor.Init();
         }
     }, 1);
-}
+};
