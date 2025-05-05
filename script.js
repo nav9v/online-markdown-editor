@@ -177,6 +177,22 @@ const Editor = {
         }
         return `<pre class="hljs"><code>${this.markdownItInstance?.utils.escapeHtml(code) || code}</code></pre>`;
     },
+ // Detect lines with LaTeX even without brackets nd wrap them in $$...$$ 🤔
+    processLatexPaste: function(text) {
+        const lines = text.split('\n');
+        return lines.map(line => {
+            const trimmed = line.trim();
+            if (trimmed && 
+                !trimmed.startsWith('$$') && 
+                !trimmed.startsWith('\\[') && 
+                !trimmed.endsWith('$$') && 
+                !trimmed.endsWith('\\]') && 
+                /\\[a-zA-Z]+\b/.test(trimmed)) { // Changed regex
+                return `$$${trimmed}$$`;
+            }
+            return line;
+        }).join('\n');
+    },
 
     setupEventListeners: function () {
         this.elements.textarea.addEventListener('input', () => {
@@ -184,8 +200,17 @@ const Editor = {
             this.debouncedUpdate();
         });
 
-        // Add paste event listener for immediate preview update
-        this.elements.textarea.addEventListener('paste', () => {
+        // Replace the existing paste listener with this
+        this.elements.textarea.addEventListener('paste', (e) => {
+            const clipboardData = e.clipboardData || window.clipboardData;
+            const pastedText = clipboardData.getData('text/plain');
+            const processedText = this.processLatexPaste(pastedText);
+            
+            // Prevent default paste and insert modified text
+            e.preventDefault();
+            document.execCommand('insertText', false, processedText);
+            
+            // Trigger update
             setTimeout(() => this.UpdatePreview(true), 0);
         });
 
