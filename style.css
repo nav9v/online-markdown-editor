@@ -513,7 +513,7 @@ input:focus {
     background-color: #6D2323;
 }
 
-/* Hamburger Menu Button - Updated position and styling */
+
 .hamburger-btn {
     display: none;
     justify-content: center;
@@ -533,7 +533,7 @@ input:focus {
     top: 3px;
 }
 
-/* Mobile Menu */
+
 .mobile-menu {
     display: none;
     position: fixed;
@@ -601,6 +601,22 @@ input:focus {
     flex-direction: column;
 }
 
+
+.autosave-indicator {
+    font-size: 0.8em;
+    color: #6D2323;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.autosave-indicator.visible {
+    opacity: 1;
+}
+
 @media screen and (max-width: 991px) {
     .toolbar {
         padding: 8px 10px;
@@ -645,28 +661,28 @@ input:focus {
         flex-wrap: wrap;
         justify-content: center;
         gap: 5px;
-        padding: 8px 5px 8px 50px; /* Add left padding for hamburger */
-        position: relative; /* For absolute positioning of hamburger */
+        padding: 8px 5px 8px 50px;
+        position: relative;
     }
 
-    /* Hide the GitHub link on mobile */
+
     .toolbar>a[href*="github"] {
         display: none;
     }
 
-    /* Hide the "Using markdown-it..." text on mobile */
+
     .toolbar>span {
         display: none;
     }
 
-    /* Create proper ordering with flexbox */
+
     .toolbar {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
     }
 
-    /* Make labels and button groups appear on the same row properly */
+
     .toolbar label {
         margin: 5px 0 2px 0;
         width: 100%;
@@ -687,7 +703,7 @@ input:focus {
         font-size: 0.8em;
     }
 
-    /* Fix the dropdown positioning */
+
     .toolbar .dropdown {
         position: static;
         width: 80%;
@@ -707,69 +723,70 @@ input:focus {
         width: auto;
     }
 
-    /* Center the custom CSS button */
+
     .toolbar #btn-toggle-css {
         margin: 0 auto;
         width: 80%;
     }
 
-    /* CRITICAL FIX: Container should remain column direction but panes need proper display handling */
+
     .container {
         flex-direction: column;
-        height: calc(100vh - 105px); /* Further adjusted to eliminate footer white space */
-        min-height: 300px; /* Ensure minimum height even on small screens */
-        margin-bottom: 0; /* Ensure no margin is adding space */
+        height: calc(100vh - 105px);
+        min-height: 300px;
+        margin-bottom: 0;
     }
 
-    /* In mobile view, initially only show editor pane */
+
     .pane {
         height: 100%;
         width: 100%;
         padding: 15px;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        -webkit-overflow-scrolling: touch;
     }
 
-    #editor-pane, #preview-pane {
+    #editor-pane,
+    #preview-pane {
         max-height: 100%;
     }
 
     #markdown-input {
-        padding-bottom: 50px; /* Add padding at bottom to prevent text being cut off */
+        padding-bottom: 50px;
     }
 
     #preview-content {
-        padding-bottom: 60px; /* More padding at the bottom */
-        overflow-x: auto; /* Allow horizontal scrolling for formulas */
+        padding-bottom: 60px;
+        overflow-x: auto;
     }
 
-    /* Show hamburger button */
+
     .hamburger-btn {
         display: flex;
         order: -2;
     }
 
-    /* Mobile menu adjustments */
+
     .mobile-menu {
         display: block;
     }
 
-    /* Hide desktop controls */
+
     .desktop-controls {
         display: none;
     }
 
-    /* Ensure editor/preview buttons remain visible */
+
     .mobile-toggle-buttons {
         display: flex;
         margin: 0 auto;
         justify-content: center;
         width: calc(100% - 50px);
-        /* Account for hamburger button */
+
         order: -1;
     }
 
-    /* Make math displays scrollable horizontally */
+
     #preview-content .MathJax_Display,
     #preview-content .katex-display {
         max-width: 100%;
@@ -778,24 +795,32 @@ input:focus {
         padding: 5px 0;
     }
 
-    /* Ensure tables can be scrolled on mobile */
+
     #preview-content table {
         display: block;
         overflow-x: auto;
         width: 100%;
     }
 
-    /* Adjust code blocks to be fully visible */
+
     #preview-content pre {
         max-width: 100%;
         overflow-x: auto;
     }
+
+    .autosave-indicator {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        font-size: 0.7em;
+        z-index: 100;
+    }
 }
 
-/* Fix for very small screens to ensure everything is scrollable */
+
 @media screen and (max-height: 500px) {
     .container {
-        height: calc(100vh - 85px); /* Further adjusted */
+        height: calc(100vh - 85px);
     }
 
     .pane {
@@ -803,7 +828,7 @@ input:focus {
     }
 
     .mobile-menu {
-        padding-top: 45px; /* Reduce top padding on small height screens */
+        padding-top: 45px;
     }
 }
 
@@ -883,7 +908,7 @@ input:focus {
     }
 }
 
-/* Ensure preview content is fully visible and scrollable */
+
 #preview-content {
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -899,16 +924,16 @@ input:focus {
     overflow-x: auto;
 }
 
-/* Source code link styling (moved from inline) */
+
 .source-code-link {
     margin-right: 15px;
-    color: #A31D1D; 
+    color: #A31D1D;
     text-decoration: none;
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 0.9em;
 }
 
-/* Toolbar info text styling (moved from inline) */
+
 .toolbar-info {
     margin-left: auto;
     font-size: 0.8em;

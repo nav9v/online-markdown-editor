@@ -11,7 +11,7 @@
   <meta name="keywords"
     content="online markdown editor, markdown editor, live preview markdown, mathjax, katex, latex, mermaid, syntax highlighting, markdown-it, marked, llm output markdown editor, open source markdown editor">
 
-  <!-- Favicon Setup -->
+
   <link rel="apple-touch-icon" sizes="180x180" href="asset/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="asset/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="asset/favicon-16x16.png">
@@ -53,7 +53,7 @@
 
   <script src="script.js"></script>
 
-  <!-- Add this script at the end of the head section -->
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const hamburgerBtn = document.getElementById('mobile-hamburger');
@@ -65,7 +65,7 @@
           hamburgerBtn.classList.toggle('active');
         });
 
-        // Close menu when clicking outside
+
         document.addEventListener('click', function (event) {
           if (!mobileMenu.contains(event.target) && !hamburgerBtn.contains(event.target) && mobileMenu.classList.contains('open')) {
             mobileMenu.classList.remove('open');
@@ -79,23 +79,24 @@
 
 <body>
   <div class="toolbar">
-    <a href="https://github.com/nav9v/online-markdown-editor" target="_blank" rel="noopener noreferrer" class="source-code-link">Get Source Code</a>
+    <a href="https://github.com/nav9v/online-markdown-editor" target="_blank" rel="noopener noreferrer"
+      class="source-code-link">Get Source Code</a>
 
-    <!-- Replace bar spans with hamburger emoji -->
+
     <button id="mobile-hamburger" class="hamburger-btn" aria-label="Open menu">
       🍔
     </button>
 
-    <!-- Mobile view toggle buttons - moved to top for mobile order -->
+
     <div class="mobile-toggle-buttons">
       <button id="btn-show-editor" class="active">Editor</button>
       <button id="btn-show-preview">Preview</button>
     </div>
 
-    <!-- Mobile Menu (slide-out panel) -->
+
     <div id="mobile-menu" class="mobile-menu">
       <div class="mobile-menu-content">
-        <!-- Markdown engine section -->
+
         <div class="mobile-menu-section">
           <label for="md-engine-mobile">MD Engine:</label>
           <div class="button-group" id="md-engine-mobile">
@@ -104,7 +105,7 @@
           </div>
         </div>
 
-        <!-- Math engine section -->
+
         <div class="mobile-menu-section">
           <label for="math-engine-mobile">Math Engine:</label>
           <div class="button-group" id="math-engine-mobile">
@@ -113,7 +114,7 @@
           </div>
         </div>
 
-        <!-- Download buttons -->
+
         <div class="mobile-menu-section">
           <label>Download:</label>
           <div class="mobile-menu-buttons">
@@ -123,30 +124,30 @@
           </div>
         </div>
 
-        <!-- Custom CSS button -->
+
         <div class="mobile-menu-section">
           <button id="btn-toggle-css-mobile">Custom CSS</button>
         </div>
       </div>
     </div>
 
-    <!-- Original desktop controls (will be hidden on mobile) -->
+
     <div class="desktop-controls">
-      <!-- Markdown engine section -->
+
       <label for="md-engine">MD Engine:</label>
       <div class="button-group" id="md-engine-selector">
         <button id="btn-markdown-it" data-engine="markdown-it" class="active">markdown-it</button>
         <button id="btn-marked" data-engine="marked">marked</button>
       </div>
 
-      <!-- Math engine section -->
+
       <label for="math-engine">Math Engine:</label>
       <div class="button-group" id="math-engine-selector">
         <button id="btn-mathjax" data-engine="mathjax" class="active">MathJax</button>
         <button id="btn-katex" data-engine="katex">KaTeX</button>
       </div>
 
-      <!-- Download dropdown -->
+
       <div class="dropdown">
         <button id="btn-download">Download ▼</button>
         <div class="dropdown-content">
@@ -156,8 +157,11 @@
         </div>
       </div>
 
-      <!-- Custom CSS button -->
+
       <button id="btn-toggle-css">Custom CSS</button>
+
+
+      <span id="autosave-indicator" class="autosave-indicator">Auto-saved</span>
     </div>
 
     <span class="toolbar-info">Using markdown-it, Marked, Mermaid, highlight.js</span>
@@ -250,7 +254,7 @@ graph TD
 import numpy as np
 
 def main():
-    # This is a comment
+    
     x = np.array([1, 2, 3])
     print(f"Hello from Python! {x.mean()}")
 
@@ -265,7 +269,7 @@ async function getData(url) {
     if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
     const data = await response.json();
     console.log("Data:", data);
-    return data; // Works with Promises
+    return data; 
   } catch (error) {
     console.error("Fetch failed:", error);
   }
