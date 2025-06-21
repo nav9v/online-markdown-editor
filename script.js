@@ -18,7 +18,7 @@ const Editor = {
         autosaveInterval: 5000,
     },
     state: {
-        currentMathEngine: 'mathjax',
+        currentMathEngine: 'katex',
         currentMarkdownEngine: 'markdown-it',
         customCssVisible: false,
         lastText: '',
@@ -187,7 +187,9 @@ const Editor = {
                 !trimmed.startsWith('\\[') && 
                 !trimmed.endsWith('$$') && 
                 !trimmed.endsWith('\\]') && 
-                /\\[a-zA-Z]+\b/.test(trimmed)) { // Changed regex
+                !/\$.*\$/.test(trimmed) && // Check if line already has $ delimiters
+                !/\\[()\[\]]/.test(trimmed) && // Check if line already has \( \) or \[ \] delimiters
+                /\\[a-zA-Z]+\b/.test(trimmed)) { // Has LaTeX commands
                 return `$$${trimmed}$$`;
             }
             return line;
@@ -553,6 +555,15 @@ const Editor = {
             this.state.currentMarkdownEngine = engine;
             this.elements.markdownItBtn.classList.toggle('active', engine === 'markdown-it');
             this.elements.markedBtn.classList.toggle('active', engine === 'marked');
+            
+            // Update mobile buttons
+            const mobileMarkdownItBtn = document.getElementById('btn-markdown-it-mobile');
+            const mobileMarkedBtn = document.getElementById('btn-marked-mobile');
+            if (mobileMarkdownItBtn && mobileMarkedBtn) {
+                mobileMarkdownItBtn.classList.toggle('active', engine === 'markdown-it');
+                mobileMarkedBtn.classList.toggle('active', engine === 'marked');
+            }
+            
             this.state.lastText = '';
             this.UpdatePreview();
         }
@@ -563,6 +574,15 @@ const Editor = {
             this.state.currentMathEngine = engine;
             this.elements.mathJaxBtn.classList.toggle('active', engine === 'mathjax');
             this.elements.kaTeXBtn.classList.toggle('active', engine === 'katex');
+            
+            // Update mobile buttons
+            const mobileMathJaxBtn = document.getElementById('btn-mathjax-mobile');
+            const mobileKaTeXBtn = document.getElementById('btn-katex-mobile');
+            if (mobileMathJaxBtn && mobileKaTeXBtn) {
+                mobileMathJaxBtn.classList.toggle('active', engine === 'mathjax');
+                mobileKaTeXBtn.classList.toggle('active', engine === 'katex');
+            }
+            
             this.state.lastText = '';
             this.UpdatePreview();
         }
