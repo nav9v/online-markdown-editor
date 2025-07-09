@@ -38,4 +38,6 @@ Getting this running on your own machine is super simple because it's just HTML,
 
 **Important Note:** This editor relies on several external libraries (like `markdown-it`, `MathJax`, `KaTeX`, `highlight.js`, `Mermaid`, etc.) that are loaded from the internet (CDNs). **This means you'll need an active internet connection for all the features to work correctly when you run `index.html` locally.**
 
+### Inspiration came from [here](https://github.com/kerzol/markdown-mathjax)
+
 Enjoy writing!
