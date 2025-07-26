@@ -660,8 +660,24 @@ const Editor = {
 
         try {
             const printContainer = document.createElement('div');
-            printContainer.className = 'pdf-container';
-            printContainer.innerHTML = previewContent.innerHTML;
+printContainer.className = 'pdf-container';
+printContainer.innerHTML = previewContent.innerHTML;
+
+// 💥 Force inline span layout for all h1s (PDF workaround)
+printContainer.querySelectorAll("h1").forEach(h => {
+    const text = h.textContent;
+    h.innerHTML = ''; // clear
+    text.split(' ').forEach(word => {
+        const span = document.createElement('span');
+        span.textContent = word + ' ';
+        span.style.display = 'inline-block';
+        span.style.marginRight = '0.25em';
+        h.appendChild(span);
+    });
+    h.style.fontFamily = "Arial, sans-serif";
+    h.style.fontSize = "24pt";
+    h.style.fontWeight = "bold";
+});
             printContainer.style.width = '650px';
             printContainer.style.backgroundColor = 'white';
             printContainer.style.color = 'black';
